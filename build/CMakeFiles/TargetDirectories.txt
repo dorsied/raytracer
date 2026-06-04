@@ -1,3 +1,0 @@
-C:/4git/raytracer/build/CMakeFiles/Raytracer.dir
-C:/4git/raytracer/build/CMakeFiles/edit_cache.dir
-C:/4git/raytracer/build/CMakeFiles/rebuild_cache.dir
