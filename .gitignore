@@ -3,3 +3,4 @@
 *.o
 Raytracer
 raytracer
+*.ppm
