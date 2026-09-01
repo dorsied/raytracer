@@ -36,6 +36,7 @@ class camera {
     color ambient_color = color(0,0,0);
     std::vector<PointLight> point_lights;
     std::vector<ParallelLight> parallel_lights;
+    std::vector<SpotLight> spot_lights;
 
     std::unordered_map<std::string, std::shared_ptr<Texture>> texture_cache;
 
@@ -51,7 +52,7 @@ class camera {
                 write_color(out, ray_color(get_ray(i, j), world, max_bounces));
             }
         }
-        std::clog << "\rDone.\n";
+        std::clog << "\rDone.                              \n";
     }
 
   private:
@@ -153,6 +154,39 @@ class camera {
             result += mat.ks * spec * lc;
         }
 
+        // 4. Spot lights
+        for (const auto& light : spot_lights) {
+            vec3 Lv   = toVec3(light.position) - rec.p;
+            double dist = Lv.length();
+            vec3 L    = unit_vector(Lv);
+            if (in_shadow(rec.p, L, dist, world)) continue;
+
+            // Angle between spot direction and the vector TO the hit point
+            vec3 spot_dir = unit_vector(toVec3(light.direction));
+            double cos_angle = dot(spot_dir, -L);   // -L = direction from light to surface
+            double angle_deg = degrees_to_radians(0); // convert back for comparison
+            double alpha1_cos = std::cos(degrees_to_radians(light.alpha1));
+            double alpha2_cos = std::cos(degrees_to_radians(light.alpha2));
+
+            // Outside outer cone: no contribution
+            if (cos_angle < alpha2_cos) continue;
+
+            // Smooth falloff between inner (alpha1) and outer (alpha2) cone
+            double intensity = 1.0;
+            if (cos_angle < alpha1_cos) {
+                double t = (cos_angle - alpha2_cos) / (alpha1_cos - alpha2_cos);
+                intensity = t * t;  // quadratic falloff
+            }
+
+            color lc = toColor(light.color);
+            double diff = std::fmax(0.0, dot(N, L));
+            result += intensity * mat.kd * diff * (surface_color * lc);
+
+            vec3 H = unit_vector(L + V);
+            double spec = std::pow(std::fmax(0.0, dot(N, H)), mat.exponent);
+            result += intensity * mat.ks * spec * lc;
+        }
+
         // reflection and refraction 
 
         if (mat.reflectance > 0.0) {
@@ -193,8 +227,7 @@ class camera {
         return result;
     }
 
-    bool in_shadow(const point3& origin, const vec3& dir,
-                   double max_dist, const hittable& world) const {
+    bool in_shadow(const point3& origin, const vec3& dir, double max_dist, const hittable& world) const {
         hit_record tmp;
         return world.hit(ray(origin, dir), interval(1e-4, max_dist - 1e-4), tmp);
     }

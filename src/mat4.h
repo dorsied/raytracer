@@ -5,7 +5,7 @@
 #include "vec3.h"
 #include "ray.h"
 #include "utility.h"
-#include "core/Scene.h"   // for Transform / TransformType
+#include "core/Scene.h"
 
 struct Mat4 {
     double m[4][4] = {};

@@ -33,6 +33,13 @@ class hittable_list : public hittable {
 
         return hit_anything;
     }
+
+    aabb bounding_box() const override {
+        aabb box;
+        for (const auto& obj : objects)
+            box = aabb::merge(box, obj->bounding_box());
+        return box;
+    }
 };
 
 #endif

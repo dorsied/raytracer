@@ -17,9 +17,6 @@ set(SOURCES
     src/main.cpp
     src/parser/SceneParser.cpp
     external/tinyxml2/tinyxml2.cpp
-    # Add more as you implement them:
-    # src/geometry/Sphere.cpp
-    # src/geometry/Mesh.cpp
 )
 
 add_executable(raytracer ${SOURCES})

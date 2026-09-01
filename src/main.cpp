@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "hittable.h"
 #include "hittable_list.h"
+#include "bvh.h" 
 #include "sphere.h"
 #include "mesh.h"
 #include "parser/SceneParser.h"
@@ -77,6 +78,9 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // build BVH over all primitives
+    bvh_node bvh(world);
+
     camera cam;
     cam.position = point3(c.position.x, c.position.y, c.position.z);
     cam.lookat = point3(c.lookat.x,   c.lookat.y,   c.lookat.z);
@@ -95,6 +99,7 @@ int main(int argc, char* argv[]) {
     }
     cam.point_lights = scene.pointLights;
     cam.parallel_lights = scene.parallelLights;
+    cam.spot_lights = scene.spotLights;
 
     for (const auto& m : scene.meshes) {
         if (m.material.textured && !m.material.textureName.empty()) {
@@ -103,12 +108,12 @@ int main(int argc, char* argv[]) {
                 tex->load("scenes/" + m.material.textureName);
                 std::cerr << "Loaded texture: " << m.material.textureName << "\n";
             } catch (const std::exception& e) {
-                std::cerr << "FAILED: " << e.what() << "\n";  // ← add this
+                std::cerr << "FAILED: " << e.what() << "\n";
             }
             cam.texture_cache[m.material.textureName] = tex;
         }
     }
 
 
-    cam.render(world);
+    cam.render(bvh);
 }

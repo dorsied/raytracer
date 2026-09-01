@@ -22,28 +22,49 @@ class Texture {
     ~Texture() { if (data) stbi_image_free(data); }
 
     color sample(double u, double v) const {
-        if (!data) return color(1, 0, 1);
+      if (!data) return color(1, 0, 1);
 
-        u = u - std::floor(u);
-        v = v - std::floor(v);
+      u = u - std::floor(u);
+      v = v - std::floor(v);
 
-        int x = int(u * width);
-        int y = int(v * height);
+      // pixel coordinates with fractional part
+      double xf = u * width - 0.5;
+      double yf = v * height - 0.5;
 
-        x = std::min(x, width  - 1);
-        y = std::min(y, height - 1);
+      // top-left corner
+      int x0 = (int)std::floor(xf);
+      int y0 = (int)std::floor(yf);
 
-        int idx = (y * width + x) * 3;
-        return color(data[idx] / 255.0,
-                     data[idx + 1] / 255.0,
-                     data[idx + 2] / 255.0);
-    }
+      // fractional parts
+      double tx = xf - x0;
+      double ty = yf - y0;
+
+      // clamp all four neighbours
+      auto px = [&](int x, int y) -> color {
+          x = ((x % width) + width) % width;
+          y = ((y % height) + height) % height;
+          int idx = (y * width + x) * 3;
+          return color(data[idx] / 255.0,
+                       data[idx + 1] / 255.0,
+                       data[idx + 2] / 255.0);
+      };
+
+      color c00 = px(x0, y0);
+      color c10 = px(x0 + 1, y0);
+      color c01 = px(x0, y0 + 1);
+      color c11 = px(x0 + 1, y0 + 1);
+
+      // bilinear blend
+      color c0 = (1 - tx) * c00 + tx * c10;
+      color c1 = (1 - tx) * c01 + tx * c11;
+      return (1 - ty) * c0 + ty * c1;
+  }
 
     bool loaded() const { return data != nullptr; }
 
   private:
     unsigned char* data = nullptr;
-    int width  = 0;
+    int width = 0;
     int height = 0;
 };
 

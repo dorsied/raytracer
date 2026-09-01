@@ -1,0 +1,245 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE scene SYSTEM "scene.dtd">
+
+<scene output_file="final_scene.png">
+    <background_color r="0.01" g="0.01" b="0.02"/>
+
+    <camera>
+        <position x="0.0" y="3.0" z="6.0"/>
+        <lookat x="0.0" y="0.5" z="-3.0"/>
+        <up x="0.0" y="1.0" z="0.0"/>
+        <horizontal_fov angle="60"/>
+        <resolution horizontal="1920" vertical="1080"/>
+        <max_bounces n="8"/>
+    </camera>
+
+    <lights>
+        <!-- ambient -->
+        <ambient_light>
+            <color r="5" g="5" b="5"/>
+        </ambient_light>
+
+        <!-- Spot light left -->
+        <spot_light>
+            <color r="1.2" g="0.8" b="0.2"/>
+            <position x="-3.5" y="6.0" z="-2.0"/>
+            <direction x="0.0" y="-1.0" z="0.0"/>
+            <falloff alpha1="12" alpha2="25"/>
+        </spot_light>
+
+        <!-- Spot light center-->
+        <spot_light>
+            <color r="0.7" g="0.85" b="1.4"/>
+            <position x="0.0" y="6.0" z="-2.0"/>
+            <direction x="0.0" y="-1.0" z="0.0"/>
+            <falloff alpha1="12" alpha2="25"/>
+        </spot_light>
+
+        <!-- Spot light right-->
+        <spot_light>
+            <color r="1.4" g="0.5" b="0.2"/>
+            <position x="3.5" y="6.0" z="-2.0"/>
+            <direction x="0.0" y="-1.0" z="0.0"/>
+            <falloff alpha1="12" alpha2="25"/>
+        </spot_light>
+
+        <!-- Subtle fill light from behind camera -->
+        <point_light>
+            <color r="0.08" g="0.08" b="0.12"/>
+            <position x="0.0" y="4.0" z="5.0"/>
+        </point_light>
+    </lights>
+
+    <surfaces>
+
+        <!-- Floor-->
+        <mesh name="plane_small.obj">
+            <material_textured>
+                <texture name="mramor6x6.png"/>
+                <phong ka="0.05" kd="0.7" ks="0.8" exponent="120"/>
+                <reflectance r="0.15"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_textured>
+            <transform>
+                <translate x="0.0" y="-1.5" z="-3.0"/>
+                <rotateX theta="-90"/>
+                <scale x="22" y="22" z="1"/>
+            </transform>
+        </mesh>
+
+        <!-- Back wall-->
+        <mesh name="plane_small.obj">
+            <material_textured>
+                <texture name="Brick.png"/>
+                <phong ka="0.05" kd="0.8" ks="0.2" exponent="10"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_textured>
+            <transform>
+                <translate x="0.0" y="3.0" z="-10.0"/>
+                <scale x="42" y="40" z="1"/>
+            </transform>
+        </mesh>
+
+        <!-- Left wall-->
+        <mesh name="plane_small.obj">
+            <material_solid>
+                <color r="5" g="5" b="5"/>
+                <phong ka="0.05" kd="0.7" ks="0.1" exponent="10"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="-8.0" y="3.0" z="-3.0"/>
+                <rotateY theta="90"/>
+                <scale x="14" y="10" z="1"/>
+            </transform>
+        </mesh>
+
+        <!-- Right wall-->
+        <mesh name="plane_small.obj">
+            <material_solid>
+                <color r="0.12" g="0.10" b="0.15"/>
+                <phong ka="0.05" kd="0.7" ks="0.1" exponent="10"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="8.0" y="3.0" z="-3.0"/>
+                <rotateY theta="-90"/>
+                <scale x="14" y="10" z="1"/>
+            </transform>
+        </mesh>
+
+        <!-- Left cylinder -->
+        <mesh name="cylinder.obj">
+            <material_solid>
+                <color r="0.18" g="0.15" b="0.12"/>
+                <phong ka="0.05" kd="0.6" ks="0.6" exponent="60"/>
+                <reflectance r="0.05"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="-3.5" y="-0.25" z="-2.0"/>
+                <scale x="0.6" y="1.25" z="0.6"/>
+            </transform>
+        </mesh>
+
+        <!-- Central Cylinder -->
+        <mesh name="cylinder.obj">
+            <material_solid>
+                <color r="0.18" g="0.15" b="0.12"/>
+                <phong ka="0.05" kd="0.6" ks="0.6" exponent="60"/>
+                <reflectance r="0.05"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="0.0" y="-0.25" z="-2.0"/>
+                <scale x="0.6" y="1.25" z="0.6"/>
+            </transform>
+        </mesh>
+
+        <!-- Right cylinder -->
+        <mesh name="cylinder.obj">
+            <material_solid>
+                <color r="0.18" g="0.15" b="0.12"/>
+                <phong ka="0.05" kd="0.6" ks="0.6" exponent="60"/>
+                <reflectance r="0.05"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="3.5" y="-0.25" z="-2.0"/>
+                <scale x="0.6" y="1.25" z="0.6"/>
+            </transform>
+        </mesh>
+
+        <!-- Left Sphere-->
+        <sphere radius="0.85">
+            <position x="-3.5" y="1.35" z="-2.0"/>
+            <material_solid>
+                <color r="0.83" g="0.68" b="0.22"/>
+                <phong ka="0.05" kd="0.3" ks="1.0" exponent="400"/>
+                <reflectance r="0.85"/>
+                <transmittance t="0.0"/>
+                <refraction iof="0"/>
+            </material_solid>
+        </sphere>
+
+        <!-- Center Sphere-->
+        <sphere radius="0.85">
+            <position x="0.0" y="1.35" z="-2.0"/>
+            <material_solid>
+                <color r="0.85" g="0.95" b="1.0"/>
+                <phong ka="0.02" kd="0.05" ks="1.0" exponent="800"/>
+                <reflectance r="0.05"/>
+                <transmittance t="0.92"/>
+                <refraction iof="1.52"/>
+            </material_solid>
+        </sphere>
+
+        <!-- Right Sphere -->
+        <sphere radius="0.85">
+            <position x="3.5" y="1.35" z="-2.0"/>
+            <material_solid>
+                <color r="0.08" g="0.12" b="0.55"/>
+                <phong ka="0.05" kd="0.8" ks="0.9" exponent="200"/>
+                <reflectance r="0.25"/>
+                <transmittance t="0.0"/>
+                <refraction iof="0"/>
+            </material_solid>
+        </sphere>
+
+        <!-- Boxes-->
+        <mesh name="box.obj">
+            <material_solid>
+                <color r="0.15" g="0.12" b="0.20"/>
+                <phong ka="0.05" kd="0.6" ks="0.4" exponent="30"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="-6.5" y="-0.5" z="-7.0"/>
+                <rotateY theta="20"/>
+                <scale x="1.2" y="2.0" z="1.2"/>
+            </transform>
+        </mesh>
+
+        <mesh name="box.obj">
+            <material_solid>
+                <color r="0.15" g="0.12" b="0.20"/>
+                <phong ka="0.05" kd="0.6" ks="0.4" exponent="30"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="6.5" y="-0.5" z="-7.0"/>
+                <rotateY theta="-20"/>
+                <scale x="1.2" y="2.0" z="1.2"/>
+            </transform>
+        </mesh>
+
+        <mesh name="box.obj">
+            <material_solid>
+                <color r="0.15" g="0.12" b="0.20"/>
+                <phong ka="0.05" kd="0.6" ks="0.4" exponent="30"/>
+                <reflectance r="0.0"/>
+                <transmittance t="0"/>
+                <refraction iof="0"/>
+            </material_solid>
+            <transform>
+                <translate x="0.0" y="-1.0" z="-8.5"/>
+                <scale x="2.5" y="1.0" z="1.0"/>
+            </transform>
+        </mesh>
+
+    </surfaces>
+</scene>
